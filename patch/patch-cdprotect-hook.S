@@ -34,11 +34,11 @@ fixup_row_1:
 .thumb
 initialize:
 	push {r0,r1}
-	
+
 fixup_row_2:
 	// Safe to destroy r0,r1,r2,r3,lr,flags
 	.hword (1 << 0) | (1 << 1) | (1 << 2) | (1 << 3) | (1 << 14)
-	
+
 	// Search the ROM for the SCMD 03 dispatch table.
 	ldr r1, constant_000001A3
 	ldr r2, constant_000009A4
@@ -53,11 +53,11 @@ search_loop:
 	ldr r3, [r0, #4]
 	cmp r3, r2
 	bne search_loop
-	
+
 fixup_row_3:
 	// Safe to destroy r1,r2,r3,lr,flags
 	.hword (1 << 1) | (1 << 2) | (1 << 3) | (1 << 14)
-	
+
 	// Unlock patch registers.
 	ldr r2, constant_CF7EE669
 	ldr r1, constant_03880050
@@ -65,7 +65,7 @@ fixup_row_3:
 	lsrs r2, r2, #16
 	//----
 	strh r2, [r1]
-	
+
 	// Disable patches in patch registers.
 	subs r1, r1, #0x10
 	movs r2, #0
@@ -90,11 +90,11 @@ fixup_row_4:
 	str r0, [r1, #0x04]
 	adds r2, r2, #1
 	str r2, [r1, #0x08]
-	
+
 fixup_row_5:
 	// Safe to destroy r0,r2,r3,lr
 	.hword (1 << 0) | (1 << 2) | (1 << 3) | (1 << 14)
-	
+
 	// Enable this patch.
 	movs r0, #1
 	//----
@@ -126,7 +126,7 @@ fixup_row_7:
 .thumb
 scmd_03_A4_handler:
 	nop  // FIXME: This was an unneeded push instruction before
-	
+
 	// Read address of 03:A4 plus 4 written there by initialize.
 	ldr r0, original_scmd_03_A4_handler
 	subs r0, r0, #1
@@ -142,11 +142,11 @@ scmd_03_A4_handler:
 	// clears the parameter buffer, so rely on that to get extra parameters.
 	// Check for magic bytes "MCD" after A4.
 	ldr r2, [r0, #4]
-	
+
 fixup_row_8:
 	// Safe to destroy r3
 	.hword (1 << 3)
-	
+
 	ldr r3, constant_44434DA4
 	cmp r2, r3
 	bne error
@@ -160,18 +160,18 @@ fixup_row_8:
 	bcs write            // 2 = write
 	ldr r2, [r2]         // 0 = load
 	b done
-	
+
 fixup_row_9:
 	// Between code blocks; anything can be here.
 	.hword 0xFFFF
-	
+
 execute:
 	bx r2
-	
+
 write:
 	str r3, [r2]
 	//----
-	
+
 done:
 	// r0 contains a RAM address (0x0200????), so we can shift it right to use
 	// to count to 4 instead of initializing it.
@@ -183,7 +183,7 @@ result_loop:
 	lsrs r2, r2, #8
 	lsrs r0, r0, #8
 	bne result_loop
-	
+
 	// An ordinary return works just fine.
 	nop  // FIXME: This was an unneeded push instruction before
 
@@ -191,7 +191,7 @@ fixup_row_A:
 	// Safe to destroy r0,r1,r2,r3
 	.hword (1 << 0) | (1 << 1) | (1 << 2) | (1 << 3)
 	//----
-	
+
 	bx lr
 
 // We should be aligned here; cause an error if not so we can correct it.

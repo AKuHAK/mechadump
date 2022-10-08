@@ -35,11 +35,11 @@ initialize_thunk:
 .thumb
 initialize:
 	push {r2-r3}
-	
+
 fixup_row_2:
 	// Safe to destroy r0,r1,r2,r3,flags
 	.hword (1 << 0) | (1 << 1) | (1 << 2) | (1 << 3)
-	
+
 	// Search the ROM for the SCMD 03 dispatch table.
 	ldr r1, constant_000001A3
 	ldr r2, constant_000009A4
@@ -54,7 +54,7 @@ search_loop:
 	ldr r3, [r0, #4]
 	cmp r3, r2
 	bne search_loop
-	
+
 fixup_row_3:
 	// Safe to destroy r1,r2,r3,flags
 	.hword (1 << 1) | (1 << 2) | (1 << 3)
@@ -62,14 +62,14 @@ fixup_row_3:
 fixup_row_4:
 	// Safe to destroy r1,r2,r3,flags
 	.hword (1 << 1) | (1 << 2) | (1 << 3)
-	
+
 	// Unlock patch registers.
 	ldr r2, constant_CF7EE669
 	ldr r1, constant_03880050
 	strh r2, [r1]
 	lsrs r2, r2, #16
 	strh r2, [r1]
-	
+
 	// Disable patches in patch registers.
 	subs r1, r1, #0x10
 	movs r2, #0
@@ -95,7 +95,7 @@ fixup_row_5:
 	str r0, [r1, #0x04]
 	adds r2, r2, #1
 	str r2, [r1, #0x08]
-	
+
 	// Enable this patch.
 	movs r0, #1
 	strb r0, [r1]
@@ -118,7 +118,7 @@ fixup_row_7:
 	// Return.
 	bx r0
 
-	//---- ROW 8 
+	//---- ROW 8
 	// This halfword is wasted due to alignment, so we might as well use it as
 	// a branch target for the below code.
 execute:
@@ -142,12 +142,12 @@ scmd_03_A4_handler:
 fixup_row_8:
 	// Safe to destroy r2,r3
 	.hword (1 << 2) | (1 << 3)
-	
+
 	// 03:A4 takes exactly one parameter, A4, or will fail.  However, nothing
 	// clears the parameter buffer, so rely on that to get extra parameters.
 	// Check for magic bytes "MCD" after A4.
 	ldr r2, [r0, #4]
-		
+
 	ldr r3, constant_44434DA4
 	//---- ROW 9
 	cmp r2, r3
@@ -166,14 +166,14 @@ fixup_row_9:
 	bcs write            // 2 = write
 	ldr r2, [r2]         // 0 = load
 	b done
-	
+
 fixup_row_A:
 	// Between code blocks; anything can be here.
 	.hword 0xFFFF
-	
+
 write:
 	str r3, [r2]
-	
+
 done:
 	// r0 contains a RAM address (0x0200????), so we can shift it right to use
 	// to count to 4 instead of initializing it.
@@ -186,11 +186,11 @@ result_loop:
 	lsrs r2, r2, #8
 	lsrs r0, r0, #8
 	bne result_loop
-	
+
 fixup_row_B:
 	// Safe to destroy r0,r1,r2,r3
 	.hword (1 << 0) | (1 << 1) | (1 << 2) | (1 << 3)
-	
+
 	// An ordinary return works just fine.
 	bx lr
 

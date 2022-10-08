@@ -25,14 +25,13 @@
 #include <inttypes.h>
 
 #ifdef __cplusplus
-extern "C"
-{
+extern "C" {
 #endif
 
-int cipherCbcEncrypt(uint8_t *Result, const uint8_t *Data, size_t Length, 
+int cipherCbcEncrypt(uint8_t *Result, const uint8_t *Data, size_t Length,
                      const uint8_t *Keys, int KeyCount, const uint8_t IV[8]);
 int cipherCbcDecrypt(uint8_t *Result, const uint8_t *Data, size_t Length,
-                     const uint8_t *Keys, int KeyCount,	const uint8_t IV[8]);
+                     const uint8_t *Keys, int KeyCount, const uint8_t IV[8]);
 
 #ifdef __cplusplus
 }

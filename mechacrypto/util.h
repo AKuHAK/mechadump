@@ -25,8 +25,7 @@
 #include <inttypes.h>
 
 #ifdef __cplusplus
-extern "C"
-{
+extern "C" {
 #endif
 
 void memrcpy(void *dst, void *src, size_t len);
@@ -49,4 +48,3 @@ uint64_t read_be_uint64(const uint8_t *buf);
 #endif
 
 #endif
-

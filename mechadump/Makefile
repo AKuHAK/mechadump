@@ -14,7 +14,7 @@ PATCH_OBJECTS = $(foreach obj,$(PATCHES),$(BIN_DIR)/$(obj).fixed.o)
 PAYLOAD_OBJECTS = $(foreach obj,$(PAYLOADS),$(BIN_DIR)/$(obj).o)
 BIN_OBJECTS = $(PATCH_OBJECTS) $(PAYLOAD_OBJECTS) $(IRX_OBJECTS)
 
-C_OBJECTS = 
+C_OBJECTS =
 TARGET_C_OBJECTS = $(foreach obj,$(C_OBJECTS),$(BIN_DIR)/$(obj))
 CXX_OBJECTS = configexploit.o dumper.o knowndumps.o mechadump.o sysinfo.o
 TARGET_CXX_OBJECTS = $(foreach obj,$(CXX_OBJECTS),$(BIN_DIR)/$(obj))

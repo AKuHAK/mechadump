@@ -8,7 +8,7 @@ extern "C" {
 #endif
 
 
-uint32_t crc32(const void* data, size_t n_bytes, uint32_t crc);
+uint32_t crc32(const void *data, size_t n_bytes, uint32_t crc);
 
 
 #ifdef __cplusplus
